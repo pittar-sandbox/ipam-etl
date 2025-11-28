@@ -1,0 +1,83 @@
+schemaVersion: 2.2.2
+attributes:
+  controller.devfile.io/storage-type: per-workspace
+metadata:
+  name: ipam-etl
+  provider: Red Hat
+  icon: https://design.jboss.org/quarkus/logo/final/SVG/quarkus_icon_rgb_default.svg
+  website: https://quarkus.io
+  displayName: Vibe Coding with Quarkus
+  description: Quarkus with Roo for Vibe Coding.
+  tags:
+    - Java
+    - Quarkus
+    - Camel
+    - AI
+    - Vibe Coding
+    - Roo Code
+  projectType: Quarkus
+  language: Java
+projects:
+  - name: "ipam-etl"
+    git:
+      remotes:
+        origin: "https://github.com/pittar-sandbox/ipam-etl"
+      checkoutFrom:
+        revision: "main"
+        remote: origin
+components:
+  - name: tools
+    container:
+      image: registry.redhat.io/devspaces/udi-rhel9
+      env:
+        - name: USE_JAVA21
+          value: "true"
+        - name: QUARKUS_HTTP_HOST
+          value: 0.0.0.0
+        - name: QUARKUS_ANALYTICS_DISABLED
+          value: "true"
+      endpoints:
+        - exposure: none
+          name: debug
+          protocol: tcp
+          targetPort: 5005
+        - exposure: public
+          name: main
+          protocol: https
+          targetPort: 8080
+          path: /
+        - exposure: public
+          name: quarkus-devui
+          path: /q/dev-ui
+          protocol: https
+          targetPort: 8080
+      volumeMounts:
+        - name: m2
+          path: /home/user/.m2
+      cpuLimit: '4'
+      cpuRequest: '1'
+      memoryLimit: '8G'
+      memoryRequest: '8G'
+      mountSources: true
+  - volume:
+      size: 1G
+    name: m2
+commands:
+  - id: 1-package
+    exec:
+      label: "1. Package the application"
+      component: tools
+      workingDir: ${PROJECTS_ROOT}/ipam-etl
+      commandLine: "./mvnw package"
+      group:
+        kind: build
+        isDefault: true
+  - id: 2-startdev
+    exec:
+      label: "2. Start Development mode (Hot reload + debug)"
+      component: tools
+      workingDir: ${PROJECTS_ROOT}/ipam-etl
+      commandLine: "./mvnw compile quarkus:dev"
+      group:
+        kind: run
+        isDefault: true

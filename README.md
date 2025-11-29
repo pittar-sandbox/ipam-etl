@@ -1,78 +1,72 @@
-# ipam-etl
+# IPAM ETL Application
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+A Camel Quarkus application designed to ingest, normalize, and persist IP Address Management (IPAM) data from various sources into a standardized MongoDB format.
 
-If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
+## Overview
 
-## Running the application in dev mode
+This application acts as an ETL (Extract, Transform, Load) pipeline. It monitors a specific directory for CSV files from different IPAM providers (BlueCat, Infoblox, and others), parses them according to their specific formats, normalizes the data into a common structure, and stores the results in a MongoDB database.
 
-You can run your application in dev mode that enables live coding using:
+### Key Features
 
-```shell script
+*   **Multi-Source Support:**
+    *   **BlueCat:** Parses CSV exports containing address records (`A`, `AAAA`), filtering out deleted entries.
+    *   **Infoblox:** Handles complex multi-section CSV files containing both `NETWORK` and `HOSTRECORD` definitions.
+    *   **Other:** Parses generic CSV formats mapping IP, Hostname, Status, and MAC address.
+*   **Standardized Data Model:** All inputs are converted into a unified `IpamRecord` JSON format.
+*   **Recursive Polling:** Automatically detects and processes files in nested directories within `src/main/resources/samples`.
+*   **MongoDB Persistence:** Efficiently stores normalized records using Camel's MongoDB component.
+
+## Prerequisites
+
+*   Java 21
+*   Maven (wrapper provided)
+*   MongoDB instance (running locally or accessible via network)
+
+## Configuration
+
+The application is configured via `src/main/resources/application.properties`.
+
+### Database Connection
+By default, the application connects to a local MongoDB instance:
+```properties
+quarkus.mongodb.connection-string=mongodb://localhost:27017
+quarkus.mongodb.database=ipam_db
+```
+
+### Output Endpoint
+The destination for processed records is configurable:
+```properties
+ipam.output.endpoint=mongodb:camelMongoClient?database=ipam_db&collection=ipam_records&operation=insert
+```
+
+## Running the Application
+
+### Development Mode
+Run the application in dev mode for live coding and testing:
+```bash
 ./mvnw quarkus:dev
 ```
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
-
-## Packaging and running the application
-
-The application can be packaged using:
-
-```shell script
-./mvnw package
+### Building the Application
+Package the application into a runnable JAR:
+```bash
+./mvnw clean package
+```
+Run the packaged JAR:
+```bash
+java -jar target/quarkus-app/quarkus-run.jar
 ```
 
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
+## Input Data Formats
 
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
+The application determines the parser based on the parent directory of the input file:
 
-If you want to build an _über-jar_, execute the following command:
+*   `.../bluecat/*.csv` -> BlueCat Parser
+*   `.../infoblox/*.csv` -> Infoblox Parser
+*   `.../other/*.csv` -> Generic Parser
 
-```shell script
-./mvnw package -Dquarkus.package.jar.type=uber-jar
-```
+## Testing
 
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
-
-## Creating a native executable
-
-You can create a native executable using:
-
-```shell script
-./mvnw package -Dnative
-```
-
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
-
-```shell script
-./mvnw package -Dnative -Dquarkus.native.container-build=true
-```
-
-You can then execute your native executable with: `./target/ipam-etl-1.0.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult <https://quarkus.io/guides/maven-tooling>.
-
-## Related Guides
-
-- REST ([guide](https://quarkus.io/guides/rest)): A Jakarta REST implementation utilizing build time processing and Vert.x. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it.
-- REST Jackson ([guide](https://quarkus.io/guides/rest#json-serialisation)): Jackson serialization support for Quarkus REST. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it
-- Hibernate ORM with Panache ([guide](https://quarkus.io/guides/hibernate-orm-panache)): Simplify your persistence code for Hibernate ORM via the active record or the repository pattern
-- JDBC Driver - PostgreSQL ([guide](https://quarkus.io/guides/datasource)): Connect to the PostgreSQL database via JDBC
-
-## Provided Code
-
-### Hibernate ORM
-
-Create your first JPA entity
-
-[Related guide section...](https://quarkus.io/guides/hibernate-orm)
-
-[Related Hibernate with Panache section...](https://quarkus.io/guides/hibernate-orm-panache)
-
-
-### REST
-
-Easily start your REST Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
+Integration tests are provided in `IpamRouteTest.java`. These tests verify the parsing logic by mocking the database output.
+```bash
+./mvnw test

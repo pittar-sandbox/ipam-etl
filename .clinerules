@@ -1,0 +1,12 @@
+# Project Rules
+
+1.  **Project Configuration**:
+    *   This is a Quarkus version 3.30 application.
+    *   It expects Java 21.
+    *   **IMPORTANT**: Do not change these versions in the `pom.xml`.
+
+2.  **Workflow**:
+    *   Create a new git branch for each new "task".
+
+3.  **Build Tools**:
+    *   Always use the Maven Wrapper (`./mvnw`) for running Maven commands.

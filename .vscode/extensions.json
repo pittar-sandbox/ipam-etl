@@ -1,0 +1,8 @@
+{
+  "recommendations": [
+    "redhat.java",
+    "redhat.vscode-yaml",
+    "redhat.vscode-quarkus",
+    "RooVeterinaryInc.roo-cline"
+  ]
+}

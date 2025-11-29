@@ -1,6 +1,7 @@
 package ca.pitt.demo;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +9,9 @@ import java.util.List;
 @ApplicationScoped
 @Named("ipamProcessor")
 public class IpamProcessor {
+
+    @Inject
+    IpamAiService ipamAiService;
 
     public List<IpamRecord> parseBlueCat(List<List<String>> csvData) {
         List<IpamRecord> records = new ArrayList<>();
@@ -97,4 +101,8 @@ public class IpamProcessor {
         }
         return records;
     }
-}
+    
+    public List<IpamRecord> parseUnknown(String body) {
+        return ipamAiService.convertUnknownCsv(body);
+    }
+    }

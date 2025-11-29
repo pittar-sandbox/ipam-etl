@@ -1,67 +1,162 @@
 - route:
     id: ipam-poller
     from:
-      uri: "file:src/main/resources/samples?recursive=true&noop=true&include=.*.csv&delay=5000"
+      id: from-file-source
+      uri: file
+      parameters:
+        directoryName: >-
+          src/main/resources/samples?recursive=true&noop=true&include=.*.csv&delay=5000
       steps:
-        - log: "Processing file: ${header.CamelFilePath}"
+        - log:
+            id: log-processing-file
+            message: "Processing file: ${header.CamelFilePath}"
         - choice:
+            id: choice-provider
             when:
-              - simple: "${header.CamelFileParent} contains 'bluecat'"
+              - id: when-bluecat
+                expression:
+                  simple:
+                    id: simple-bluecat-check
+                    expression: ${header.CamelFileParent} contains 'bluecat'
                 steps:
-                  - to: "direct:parseBlueCat"
-              - simple: "${header.CamelFileParent} contains 'infoblox'"
+                  - to:
+                      id: to-parse-bluecat
+                      uri: direct
+                      parameters:
+                        name: parseBlueCat
+              - id: when-infoblox
+                expression:
+                  simple:
+                    id: simple-infoblox-check
+                    expression: ${header.CamelFileParent} contains 'infoblox'
                 steps:
-                  - to: "direct:parseInfoblox"
-              - simple: "${header.CamelFileParent} contains 'other'"
+                  - to:
+                      id: to-parse-infoblox
+                      uri: direct
+                      parameters:
+                        name: parseInfoblox
+              - id: when-other
+                expression:
+                  simple:
+                    id: simple-other-check
+                    expression: ${header.CamelFileParent} contains 'other'
                 steps:
-                  - to: "direct:parseOther"
+                  - to:
+                      id: to-parse-other
+                      uri: direct
+                      parameters:
+                        name: parseOther
             otherwise:
+              id: otherwise-unknown
               steps:
-                - log: "WARN: Unknown file format/location: ${header.CamelFilePath}"
-
+                - to:
+                    id: to-parse-unknown
+                    uri: direct
+                    parameters:
+                      name: parseUnknown
 - route:
     id: parse-bluecat
     from:
-      uri: "direct:parseBlueCat"
+      id: from-parse-bluecat
+      uri: direct
+      parameters:
+        name: parseBlueCat
       steps:
-        - log: "Parsing BlueCat format"
+        - log:
+            id: log-bluecat
+            message: Parsing BlueCat format
         - unmarshal:
-            csv: {}
+            id: unmarshal-bluecat
+            csv:
+              id: csv-bluecat
         - bean:
-            ref: "ipamProcessor"
-            method: "parseBlueCat"
-        - to: "direct:persist"
-
+            id: process-bluecat
+            ref: ipamProcessor
+            method: parseBlueCat
+        - to:
+            id: to-persist-bluecat
+            uri: direct
+            parameters:
+              name: persist
 - route:
     id: parse-infoblox
     from:
-      uri: "direct:parseInfoblox"
+      id: from-parse-infoblox
+      uri: direct
+      parameters:
+        name: parseInfoblox
       steps:
-        - log: "Parsing Infoblox format"
+        - log:
+            id: log-infoblox
+            message: Parsing Infoblox format
         - bean:
-            ref: "ipamProcessor"
-            method: "parseInfoblox"
-        - to: "direct:persist"
-
+            id: process-infoblox
+            ref: ipamProcessor
+            method: parseInfoblox
+        - to:
+            id: to-persist-infoblox
+            uri: direct
+            parameters:
+              name: persist
 - route:
     id: parse-other
     from:
-      uri: "direct:parseOther"
+      id: from-parse-other
+      uri: direct
+      parameters:
+        name: parseOther
       steps:
-        - log: "Parsing Other format"
+        - log:
+            id: log-other
+            message: Parsing Other format
         - unmarshal:
-            csv: {}
+            id: unmarshal-other
+            csv:
+              id: csv-other
         - bean:
-            ref: "ipamProcessor"
-            method: "parseOther"
-        - to: "direct:persist"
-
+            id: process-other
+            ref: ipamProcessor
+            method: parseOther
+        - to:
+            id: to-persist-other
+            uri: direct
+            parameters:
+              name: persist
+- route:
+    id: parse-unknown
+    from:
+      id: from-parse-unknown
+      uri: direct
+      parameters:
+        name: parseUnknown
+      steps:
+        - log:
+            id: log-unknown
+            message: "WARN: Unknown format detected. Delegating to AI Service: ${header.CamelFilePath}"
+        - bean:
+            id: process-unknown
+            ref: ipamProcessor
+            method: parseUnknown
+        - to:
+            id: to-persist-unknown
+            uri: direct
+            parameters:
+              name: persist
 - route:
     id: persist-mongo
     from:
-      uri: "direct:persist"
+      id: from-persist
+      uri: direct
+      parameters:
+        name: persist
       steps:
-        - log: "Persisting ${body.size()} records to MongoDB"
+        - log:
+            id: log-persist
+            message: Persisting ${body.size()} records to MongoDB
         - marshal:
-            json: {}
-        - to: "{{ipam.output.endpoint}}"
+            id: marshal-json
+            json:
+              id: json-format
+        - to:
+            id: to-mongo-endpoint
+            uri: "{{ipam.output.endpoint}}"

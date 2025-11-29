@@ -87,4 +87,34 @@ public class IpamRouteTest {
         assertNotNull(records);
         assertEquals(1, records.size());
     }
+    @Test
+    public void testUnknownParsing() throws Exception {
+         AdviceWith.adviceWith(camelContext, "parse-unknown", route -> {
+             // We mock the AI processing bean to avoid calling the real LLM
+             route.weaveById("process-unknown").replace().process(exchange -> {
+                 IpamRecord record = new IpamRecord();
+                 record.ipAddress = "9.9.9.9";
+                 record.hostName = "weird-host";
+                 record.sourceSystem = "AI-Parsed";
+                 exchange.getIn().setBody(List.of(record));
+             });
+             route.weaveByToUri("direct:persist").replace().to("mock:persist");
+        });
+
+        MockEndpoint mock = camelContext.getEndpoint("mock:persist", MockEndpoint.class);
+        mock.reset();
+        mock.setExpectedMessageCount(1);
+
+        String weirdCsv = "Field1|Field2\n9.9.9.9|weird-host";
+
+        producerTemplate.sendBodyAndHeader("direct:parseUnknown", weirdCsv, "CamelFileParent", "unknown");
+
+        mock.assertIsSatisfied();
+        List records = mock.getExchanges().get(0).getIn().getBody(List.class);
+        assertNotNull(records);
+        assertEquals(1, records.size());
+        IpamRecord rec = (IpamRecord) records.get(0);
+        assertEquals("AI-Parsed", rec.sourceSystem);
+        assertEquals("9.9.9.9", rec.ipAddress);
+    }
 }

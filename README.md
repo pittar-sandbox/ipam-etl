@@ -4,10 +4,11 @@ A Camel Quarkus application designed to ingest, normalize, and persist IP Addres
 
 ## Overview
 
-This application acts as an ETL (Extract, Transform, Load) pipeline. It monitors a specific directory for CSV files from different IPAM providers (BlueCat, Infoblox, and others), parses them according to their specific formats, normalizes the data into a common structure, and stores the results in a MongoDB database.
+This application acts as an ETL (Extract, Transform, Load) pipeline using **Camel YAML DSL**. It monitors a specific directory for CSV files from different IPAM providers (BlueCat, Infoblox, and others), parses them according to their specific formats, normalizes the data into a common structure, and stores the results in a MongoDB database.
 
 ### Key Features
 
+*   **Camel YAML DSL:** Routes are defined declaratively in `src/main/resources/routes/ipam.yaml`.
 *   **Multi-Source Support:**
     *   **BlueCat:** Parses CSV exports containing address records (`A`, `AAAA`), filtering out deleted entries.
     *   **Infoblox:** Handles complex multi-section CSV files containing both `NETWORK` and `HOSTRECORD` definitions.

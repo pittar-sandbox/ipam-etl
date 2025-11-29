@@ -1,0 +1,67 @@
+- route:
+    id: ipam-poller
+    from:
+      uri: "file:src/main/resources/samples?recursive=true&noop=true&include=.*.csv&delay=5000"
+      steps:
+        - log: "Processing file: ${header.CamelFilePath}"
+        - choice:
+            when:
+              - simple: "${header.CamelFileParent} contains 'bluecat'"
+                steps:
+                  - to: "direct:parseBlueCat"
+              - simple: "${header.CamelFileParent} contains 'infoblox'"
+                steps:
+                  - to: "direct:parseInfoblox"
+              - simple: "${header.CamelFileParent} contains 'other'"
+                steps:
+                  - to: "direct:parseOther"
+            otherwise:
+              steps:
+                - log: "WARN: Unknown file format/location: ${header.CamelFilePath}"
+
+- route:
+    id: parse-bluecat
+    from:
+      uri: "direct:parseBlueCat"
+      steps:
+        - log: "Parsing BlueCat format"
+        - unmarshal:
+            csv: {}
+        - bean:
+            ref: "ipamProcessor"
+            method: "parseBlueCat"
+        - to: "direct:persist"
+
+- route:
+    id: parse-infoblox
+    from:
+      uri: "direct:parseInfoblox"
+      steps:
+        - log: "Parsing Infoblox format"
+        - bean:
+            ref: "ipamProcessor"
+            method: "parseInfoblox"
+        - to: "direct:persist"
+
+- route:
+    id: parse-other
+    from:
+      uri: "direct:parseOther"
+      steps:
+        - log: "Parsing Other format"
+        - unmarshal:
+            csv: {}
+        - bean:
+            ref: "ipamProcessor"
+            method: "parseOther"
+        - to: "direct:persist"
+
+- route:
+    id: persist-mongo
+    from:
+      uri: "direct:persist"
+      steps:
+        - log: "Persisting ${body.size()} records to MongoDB"
+        - marshal:
+            json: {}
+        - to: "{{ipam.output.endpoint}}"

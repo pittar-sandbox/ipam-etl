@@ -1,0 +1,11 @@
+IPAddress,HostName,Status,MACAddress,Description
+10.10.1.25,corp-dc01.corp.local,Assigned,00:50:56:A0:00:01,Primary Domain Controller
+10.10.1.26,corp-dc02.corp.local,Assigned,00:50:56:A0:00:02,Secondary Domain Controller
+10.10.1.30,corp-vpn-gw.corp.local,Assigned,00:50:56:A0:00:0A,VPN Concentrator Gateway
+10.10.1.40,corp-firewall.corp.local,Assigned,00:50:56:A0:00:0B,Perimeter Firewall
+10.10.1.50,reserved-for-sw01,Reserved,,Primary Core Switch Mgt IP
+10.10.2.100,dev-web01.dev.local,Assigned,00:50:56:B1:00:10,Development Web Server
+10.10.2.101,dev-db01.dev.local,Assigned,00:50:56:B1:00:11,Development Database Server
+10.10.2.200,transient-001,Transient,,DHCP assigned address for user laptop
+10.10.3.10,reserved-test-lab,Reserved,,Reserved block for QA testing environment
+10.10.4.5,corp-printer-05.corp.local,Assigned,00:50:56:C5:11:AA,Finance Department Printer

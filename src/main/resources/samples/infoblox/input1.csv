@@ -1,0 +1,11 @@
+HEADER-NETWORK,network,EA-Location,EA-Owner,comment
+NETWORK,10.10.10.0/24,BLD-A-FLR1,IT-Corp,Main Office - First Floor Data
+NETWORK,10.10.20.0/24,BLD-A-FLR2,IT-Corp,Main Office - Second Floor Data
+NETWORK,10.10.30.0/24,BLD-B-WIFI,IT-Wireless,Wireless Network B-Building
+NETWORK,10.10.40.0/26,DR-SITE,DevOps,Disaster Recovery Site - Primary Subnet
+NETWORK,10.10.40.64/26,DR-SITE,DevOps,Disaster Recovery Site - Secondary Subnet
+NETWORK,172.16.1.0/24,BLD-A-MGMT,Networking,Server Management VLAN 101
+NETWORK,172.16.2.0/25,BLD-B-MGMT,Networking,Server Management VLAN 102 - Partial
+NETWORK,172.16.2.128/25,BLD-B-MGMT,Networking,Server Management VLAN 102 - Second Half
+NETWORK,192.168.10.0/28,LAB-ENV,R&D,Small Testing Block for Engineers
+NETWORK,192.168.20.0/27,DMZ-PROD,Security,Public-Facing Web Servers

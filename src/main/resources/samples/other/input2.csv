@@ -1,0 +1,11 @@
+IPAddress,HostName,Status,MACAddress,Description
+192.168.1.1,ap-hallway-01.wifi.local,Assigned,00:1A:2B:3C:4D:5E,Access Point - Main Hallway
+192.168.1.2,ap-office-a.wifi.local,Assigned,00:1A:2B:3C:4D:5F,Access Point - Office A
+192.168.1.50,user-laptop-01,Transient,A1:B2:C3:D4:E5:F6,DHCP Lease - John Doe
+192.168.1.51,user-desktop-02,Assigned,B1:C2:D3:E4:F5:A6,Marketing Desktop
+192.168.1.100,conf-room-tv,Reserved,C1:D2:E3:F4:A5:B6,Reserved for Conference Room TV
+192.168.1.101,conf-room-phone,Assigned,D1:E2:F3:A4:B5:C6,Conference Room VOIP Phone
+192.168.2.10,lab-server-10.lab.local,Assigned,00:50:56:78:90:12,Engineering Lab Server
+192.168.2.11,lab-server-11.lab.local,Assigned,00:50:56:78:90:13,Engineering Lab Server
+192.168.2.254,lab-gateway,Reserved,,Lab Network Default Gateway
+192.168.3.1,reserved-future-use,Reserved,,Future Subnet Gateway IP

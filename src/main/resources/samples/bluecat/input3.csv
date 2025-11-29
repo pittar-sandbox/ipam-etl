@@ -1,0 +1,11 @@
+action,name,ttl,type,rdata,comment
+add,new-dev-vm-1.dev.local,3600,A,10.1.1.100,New VM for Development Team
+add,new-dev-vm-2.dev.local,3600,A,10.1.1.101,New VM for Development Team
+add,new-dev-vm-3.dev.local,3600,A,10.1.1.102,New VM for Development Team
+add,temp-host-a.temp.local,3600,A,10.1.2.5,Temporary entry to be deleted
+delete,old-server-01.corp.db,3600,A,172.20.10.5,Decommissioned server
+delete,old-switch-05.corp.mgmt,3600,A,172.20.11.5,Decommissioned switch
+add,new-prod-app-4.prod.app,3600,A,10.1.3.10,New Production Application Instance
+add,new-prod-app-5.prod.app,3600,A,10.1.3.11,New Production Application Instance
+delete,old-kiosk-3.corp.kiosks,3600,A,172.20.12.12,Kiosk removed from site
+add,backup-srv-b.backup.local,3600,A,10.1.4.20,New Backup Server

@@ -1,0 +1,11 @@
+action,name,ttl,type,rdata,comment
+add,ipv6-host-a.v6.local,3600,AAAA,2001:db8:85a3::1,First IPv6 Test Host
+add,ipv6-host-b.v6.local,3600,AAAA,2001:db8:85a3::2,Second IPv6 Test Host
+add,alias-server-1.v6.local,3600,CNAME,ipv6-host-a.v6.local,Alias for Host A
+add,ftp.corp.app,3600,CNAME,app-lb-01.corp.app,FTP Service Alias
+add,www.corp.app,3600,A,192.0.2.10,Public Web Site IP
+add,intranet.corp.app,3600,A,10.5.5.5,Internal Web Site IP
+add,print-server.corp.print,3600,A,10.5.5.10,Corporate Print Server
+add,scan-server.corp.print,3600,CNAME,print-server.corp.print,Alias for Scanning Service
+add,time-server.corp.time,3600,A,10.5.5.20,NTP Server
+add,test-server-a.test.local,3600,A,10.5.10.1,QA Test Environment Server

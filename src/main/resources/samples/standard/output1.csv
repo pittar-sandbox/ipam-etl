@@ -1,0 +1,11 @@
+IPAddress,HostName,Status,MACAddress,SubnetCIDR,VLANID,Gateway,OwnerTeam,ExpirationDate
+10.10.10.1,corp-sw-01,Assigned,00:0A:1B:2C:3D:4E,10.10.10.0/24,10,10.10.10.254,Networking,N/A
+10.10.10.2,corp-sw-02,Assigned,00:0A:1B:2C:3D:4F,10.10.10.0/24,10,10.10.10.254,Networking,N/A
+10.10.10.3,reserved-range-start,Reserved,,10.10.10.0/24,10,10.10.10.254,Networking,N/A
+10.10.10.50,user-pc-10,DHCP,A1:B2:C3:D4:E5:F6,10.10.10.0/24,10,10.10.10.254,EndUser,2026-06-15
+10.10.20.10,app-server-01.prod.local,Assigned,00:50:56:AB:CD:01,10.10.20.0/24,20,10.10.20.254,DevOps,N/A
+10.10.20.11,app-server-02.prod.local,Assigned,00:50:56:AB:CD:02,10.10.20.0/24,20,10.10.20.254,DevOps,N/A
+10.10.20.200,available-test,Available,,10.10.20.0/24,20,10.10.20.254,DevOps,N/A
+192.168.1.5,corp-printer-hr,Assigned,00:AA:BB:CC:11:22,192.168.1.0/25,100,192.168.1.1,Facilities,N/A
+192.168.1.100,guest-device-1,DHCP,00:11:22:33:44:55,192.168.1.0/25,100,192.168.1.1,Guest,2026-06-01
+172.16.5.5,backup-nfs-01,Assigned,00:0C:29:A1:B2:C3,172.16.5.0/26,50,172.16.5.1,Storage,N/A

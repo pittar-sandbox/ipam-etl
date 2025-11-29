@@ -1,0 +1,16 @@
+HEADER-NETWORK,network,comment
+NETWORK,10.50.0.0/24,VOIP Subnet for IP Phones
+
+HEADER-HOSTRECORD,fqdn*,address*,comment
+HOSTRECORD,phone-101.voip.local,10.50.0.5,Reception Phone
+HOSTRECORD,phone-102.voip.local,10.50.0.6,HR Phone
+HOSTRECORD,phone-103.voip.local,10.50.0.7,IT Phone
+
+HEADER-NETWORK,network,comment
+NETWORK,10.50.1.0/24,Guest Wireless Subnet
+
+HEADER-HOSTRECORD,fqdn*,address*,comment
+HOSTRECORD,voip-server-a.voip.local,10.50.0.10,Primary VOIP Call Manager
+HOSTRECORD,voip-server-b.voip.local,10.50.0.11,Secondary VOIP Call Manager
+HOSTRECORD,reserved-ip-a,10.50.0.250,Reserved for future device
+HOSTRECORD,reserved-ip-b,10.50.0.251,Reserved for future device

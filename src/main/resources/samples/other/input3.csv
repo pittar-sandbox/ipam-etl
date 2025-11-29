@@ -1,0 +1,11 @@
+IPAddress,HostName,Status,MACAddress,Description
+172.16.5.1,esxi-host-01.vcenter.local,Assigned,00:0C:29:1A:2B:3C,VMware ESXi Host 1 Mgt
+172.16.5.2,esxi-host-02.vcenter.local,Assigned,00:0C:29:4D:5E:6F,VMware ESXi Host 2 Mgt
+172.16.5.10,vcenter-appliance.vcenter.local,Assigned,00:50:56:FF:EE:DD,vCenter Server Appliance
+172.16.5.100,test-vm-100,Transient,,Temporary VM for testing
+172.16.5.101,test-vm-101,Transient,,Temporary VM for testing
+172.16.6.10,storage-nas-01.storage.local,Assigned,00:AA:BB:CC:DD:EE,Primary NAS Management
+172.16.6.11,storage-san-01.storage.local,Assigned,00:FF:EE:DD:CC:BB,Primary SAN Management
+172.16.7.1,reserved-dr-site,Reserved,,DR Site Replication Tunnel Endpoint
+172.16.7.2,dr-site-router,Assigned,00:C1:D2:E3:F4:A5,DR Site Border Router
+172.16.8.1,dhcp-range-start,Reserved,,Start of DHCP Scope 172.16.8.0/24

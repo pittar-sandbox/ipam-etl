@@ -1,0 +1,11 @@
+action,name,ttl,type,rdata,comment
+add,app-db-01.corp.db,3600,A,172.20.10.10,Primary Application Database
+add,app-db-02.corp.db,3600,A,172.20.10.11,Secondary Application Database
+add,app-lb-01.corp.app,3600,A,172.20.10.20,Load Balancer VIP for App
+add,storage-nas-a.corp.storage,3600,A,172.20.10.30,Primary Storage Head
+add,storage-nas-b.corp.storage,3600,A,172.20.10.31,Secondary Storage Head
+add,mgmt-switch-1.corp.mgmt,3600,A,172.20.11.1,Core Switch 1 Management
+add,mgmt-switch-2.corp.mgmt,3600,A,172.20.11.2,Core Switch 2 Management
+add,mgmt-router-1.corp.mgmt,3600,A,172.20.11.3,Border Router Management
+add,kiosk-1.corp.kiosks,3600,A,172.20.12.10,Lobby Kiosk IP
+add,kiosk-2.corp.kiosks,3600,A,172.20.12.11,Cafeteria Kiosk IP

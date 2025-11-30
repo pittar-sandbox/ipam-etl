@@ -75,6 +75,8 @@ components:
       cpuLimit: '1'
       memoryLimit: '1G'
   - name: mongo-express
+    dependsOn:
+      - mongo
     container:
       image: mongo-express
       env:

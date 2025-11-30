@@ -5,6 +5,8 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.util.ArrayList;
 import java.util.List;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.bson.Document;
 
 @ApplicationScoped
 @Named("ipamProcessor")
@@ -12,6 +14,22 @@ public class IpamProcessor {
 
     @Inject
     IpamAiService ipamAiService;
+
+    @Inject
+    ObjectMapper objectMapper;
+
+    public List<Document> toDocuments(List<IpamRecord> records) {
+        List<Document> docs = new ArrayList<>();
+        for (IpamRecord record : records) {
+            try {
+                String json = objectMapper.writeValueAsString(record);
+                docs.add(Document.parse(json));
+            } catch (Exception e) {
+                // Ignore bad records
+            }
+        }
+        return docs;
+    }
 
     public List<IpamRecord> parseBlueCat(List<List<String>> csvData) {
         List<IpamRecord> records = new ArrayList<>();

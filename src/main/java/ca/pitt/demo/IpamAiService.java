@@ -77,7 +77,13 @@ public class IpamAiService {
                 objectMapper.getTypeFactory().constructCollectionType(List.class, IpamRecord.class));
 
         } catch (Exception e) {
-            LOG.error("Failed to parse CSV with LLM", e);
+            // Check if exception is due to shutdown/interruption
+            if (e instanceof InterruptedException ||
+               (e.getCause() != null && e.getCause() instanceof InterruptedException)) {
+               LOG.debug("LLM processing interrupted during shutdown");
+            } else {
+               LOG.error("Failed to parse CSV with LLM", e);
+            }
             return new ArrayList<>();
         }
     }

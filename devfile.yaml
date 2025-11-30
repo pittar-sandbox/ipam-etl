@@ -72,6 +72,8 @@ components:
       volumeMounts:
         - name: mongodb-data
           path: /data/db # This is the default path used by MongoDB
+      cpuLimit: '1'
+      memoryLimit: '1G'
   - volume:
       size: 1G
     name: mongodb-data

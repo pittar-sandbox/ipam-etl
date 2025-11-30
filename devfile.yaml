@@ -78,7 +78,6 @@ components:
     container:
       image: mongo-express
       env:
-        # Using ME_CONFIG_MONGODB_URL is highly reliable:
         - name: ME_CONFIG_MONGODB_URL
           value: "mongodb://user:password@mongo:27017"
         - name: ME_CONFIG_MONGODB_ADMINUSERNAME
@@ -91,8 +90,8 @@ components:
           value: "user"
         - name: ME_CONFIG_BASICAUTH_PASSWORD
           value: "password"
-    dependsOn: # <--- CRITICAL NEW ADDITION
-      - mongo
+      dependsOn:
+        - mongo
       endpoints:
         - name: mongo-express
           targetPort: 8081

@@ -46,7 +46,7 @@ public class IpamAiService {
     public List<IpamRecord> convertUnknownCsv(String csvData) {
         try {
             JsonObject request = new JsonObject()
-                .put("model", "Qwen3-14B-quantized.w4a16")
+                .put("model", "granite-3.1-8b-instruct-quantized.w4a16")
                 .put("messages", new JsonArray()
                     .add(new JsonObject().put("role", "system").put("content", SYSTEM_PROMPT))
                     .add(new JsonObject().put("role", "user").put("content", "Please parse the following CSV data:\n\n" + csvData))

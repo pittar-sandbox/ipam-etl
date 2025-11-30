@@ -90,8 +90,6 @@ components:
           value: "user"
         - name: ME_CONFIG_BASICAUTH_PASSWORD
           value: "password"
-      dependsOn:
-        - mongo
       endpoints:
         - name: mongo-express
           targetPort: 8081

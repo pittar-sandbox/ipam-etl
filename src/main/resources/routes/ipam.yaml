@@ -21,9 +21,7 @@
                 steps:
                   - to:
                       id: to-parse-bluecat
-                      uri: direct
-                      parameters:
-                        name: parseBlueCat
+                      uri: direct:parseBlueCat
               - id: when-infoblox
                 expression:
                   simple:
@@ -32,9 +30,7 @@
                 steps:
                   - to:
                       id: to-parse-infoblox
-                      uri: direct
-                      parameters:
-                        name: parseInfoblox
+                      uri: direct:parseInfoblox
               - id: when-other
                 expression:
                   simple:
@@ -43,24 +39,18 @@
                 steps:
                   - to:
                       id: to-parse-other
-                      uri: direct
-                      parameters:
-                        name: parseOther
+                      uri: direct:parseOther
             otherwise:
               id: otherwise-unknown
               steps:
                 - to:
                     id: to-parse-unknown
-                    uri: direct
-                    parameters:
-                      name: parseUnknown
+                    uri: direct:parseUnknown
 - route:
     id: parse-bluecat
     from:
       id: from-parse-bluecat
-      uri: direct
-      parameters:
-        name: parseBlueCat
+      uri: direct:parseBlueCat
       steps:
         - log:
             id: log-bluecat
@@ -75,16 +65,12 @@
             method: parseBlueCat
         - to:
             id: to-persist-bluecat
-            uri: direct
-            parameters:
-              name: persist
+            uri: direct:persist
 - route:
     id: parse-infoblox
     from:
       id: from-parse-infoblox
-      uri: direct
-      parameters:
-        name: parseInfoblox
+      uri: direct:parseInfoblox
       steps:
         - log:
             id: log-infoblox
@@ -95,16 +81,12 @@
             method: parseInfoblox
         - to:
             id: to-persist-infoblox
-            uri: direct
-            parameters:
-              name: persist
+            uri: direct:persist
 - route:
     id: parse-other
     from:
       id: from-parse-other
-      uri: direct
-      parameters:
-        name: parseOther
+      uri: direct:parseOther
       steps:
         - log:
             id: log-other
@@ -119,16 +101,12 @@
             method: parseOther
         - to:
             id: to-persist-other
-            uri: direct
-            parameters:
-              name: persist
+            uri: direct:persist
 - route:
     id: parse-unknown
     from:
       id: from-parse-unknown
-      uri: direct
-      parameters:
-        name: parseUnknown
+      uri: direct:parseUnknown
       steps:
         - log:
             id: log-unknown
@@ -139,24 +117,20 @@
             method: parseUnknown
         - to:
             id: to-persist-unknown
-            uri: direct
-            parameters:
-              name: persist
+            uri: direct:persist
 - route:
     id: persist-mongo
     from:
       id: from-persist
-      uri: direct
-      parameters:
-        name: persist
+      uri: direct:persist
       steps:
         - log:
             id: log-persist
             message: Persisting ${body.size()} records to MongoDB
-        - marshal:
-            id: marshal-json
-            json:
-              id: json-format
+        - bean:
+            id: to-documents
+            ref: ipamProcessor
+            method: toDocuments
         - to:
             id: to-mongo-endpoint
             uri: "{{ipam.output.endpoint}}"

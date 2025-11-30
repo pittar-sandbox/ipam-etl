@@ -59,6 +59,16 @@ components:
       memoryLimit: '8G'
       memoryRequest: '8G'
       mountSources: true
+  - name: mongodb
+    container:
+      image: mongo:8.2-noble
+      env:
+        - name: MONGO_INITDB_ROOT_USERNAME
+          value: user
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          value: password
+        - name: MONGO_INITDB_DATABASE
+          value: ipam
   - volume:
       size: 1G
     name: m2

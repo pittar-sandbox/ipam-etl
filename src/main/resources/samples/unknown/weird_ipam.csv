@@ -1,0 +1,4 @@
+Network Segment|Device Name|IPv4|Status Code|Managed By
+10.0.0.0/24|server-01.prod|10.0.0.5|Active|InfraTeam
+192.168.1.0/24|printer-lobby|192.168.1.50|InUse|OfficeOps
+172.16.0.0/16|database-primary|172.16.10.100|Reserved|DBA

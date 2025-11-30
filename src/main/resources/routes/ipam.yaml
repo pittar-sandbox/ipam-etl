@@ -1,0 +1,162 @@
+- route:
+    id: ipam-poller
+    from:
+      id: from-file-source
+      uri: file
+      parameters:
+        directoryName: >-
+          src/main/resources/samples?recursive=true&noop=true&include=.*.csv&delay=5000
+      steps:
+        - log:
+            id: log-processing-file
+            message: "Processing file: ${header.CamelFilePath}"
+        - choice:
+            id: choice-provider
+            when:
+              - id: when-bluecat
+                expression:
+                  simple:
+                    id: simple-bluecat-check
+                    expression: ${header.CamelFileParent} contains 'bluecat'
+                steps:
+                  - to:
+                      id: to-parse-bluecat
+                      uri: direct
+                      parameters:
+                        name: parseBlueCat
+              - id: when-infoblox
+                expression:
+                  simple:
+                    id: simple-infoblox-check
+                    expression: ${header.CamelFileParent} contains 'infoblox'
+                steps:
+                  - to:
+                      id: to-parse-infoblox
+                      uri: direct
+                      parameters:
+                        name: parseInfoblox
+              - id: when-other
+                expression:
+                  simple:
+                    id: simple-other-check
+                    expression: ${header.CamelFileParent} contains 'other'
+                steps:
+                  - to:
+                      id: to-parse-other
+                      uri: direct
+                      parameters:
+                        name: parseOther
+            otherwise:
+              id: otherwise-unknown
+              steps:
+                - to:
+                    id: to-parse-unknown
+                    uri: direct
+                    parameters:
+                      name: parseUnknown
+- route:
+    id: parse-bluecat
+    from:
+      id: from-parse-bluecat
+      uri: direct
+      parameters:
+        name: parseBlueCat
+      steps:
+        - log:
+            id: log-bluecat
+            message: Parsing BlueCat format
+        - unmarshal:
+            id: unmarshal-bluecat
+            csv:
+              id: csv-bluecat
+        - bean:
+            id: process-bluecat
+            ref: ipamProcessor
+            method: parseBlueCat
+        - to:
+            id: to-persist-bluecat
+            uri: direct
+            parameters:
+              name: persist
+- route:
+    id: parse-infoblox
+    from:
+      id: from-parse-infoblox
+      uri: direct
+      parameters:
+        name: parseInfoblox
+      steps:
+        - log:
+            id: log-infoblox
+            message: Parsing Infoblox format
+        - bean:
+            id: process-infoblox
+            ref: ipamProcessor
+            method: parseInfoblox
+        - to:
+            id: to-persist-infoblox
+            uri: direct
+            parameters:
+              name: persist
+- route:
+    id: parse-other
+    from:
+      id: from-parse-other
+      uri: direct
+      parameters:
+        name: parseOther
+      steps:
+        - log:
+            id: log-other
+            message: Parsing Other format
+        - unmarshal:
+            id: unmarshal-other
+            csv:
+              id: csv-other
+        - bean:
+            id: process-other
+            ref: ipamProcessor
+            method: parseOther
+        - to:
+            id: to-persist-other
+            uri: direct
+            parameters:
+              name: persist
+- route:
+    id: parse-unknown
+    from:
+      id: from-parse-unknown
+      uri: direct
+      parameters:
+        name: parseUnknown
+      steps:
+        - log:
+            id: log-unknown
+            message: "WARN: Unknown format detected. Delegating to AI Service: ${header.CamelFilePath}"
+        - bean:
+            id: process-unknown
+            ref: ipamProcessor
+            method: parseUnknown
+        - to:
+            id: to-persist-unknown
+            uri: direct
+            parameters:
+              name: persist
+- route:
+    id: persist-mongo
+    from:
+      id: from-persist
+      uri: direct
+      parameters:
+        name: persist
+      steps:
+        - log:
+            id: log-persist
+            message: Persisting ${body.size()} records to MongoDB
+        - marshal:
+            id: marshal-json
+            json:
+              id: json-format
+        - to:
+            id: to-mongo-endpoint
+            uri: "{{ipam.output.endpoint}}"

@@ -124,13 +124,22 @@
       id: from-persist
       uri: direct:persist
       steps:
-        - log:
-            id: log-persist
-            message: Persisting ${body.size()} records to MongoDB
-        - bean:
-            id: to-documents
-            ref: ipamProcessor
-            method: toDocuments
-        - to:
-            id: to-mongo-endpoint
-            uri: "{{ipam.output.endpoint}}"
+        - choice:
+            when:
+              - simple: "${body.size()} > 0"
+                steps:
+                  - log:
+                      id: log-persist
+                      message: Persisting ${body.size()} records to MongoDB
+                  - bean:
+                      id: to-documents
+                      ref: ipamProcessor
+                      method: toDocuments
+                  - to:
+                      id: to-mongo-endpoint
+                      uri: "{{ipam.output.endpoint}}"
+            otherwise:
+              steps:
+                - log:
+                    id: log-skip
+                    message: "Skipping persistence: No records found"

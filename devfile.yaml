@@ -61,7 +61,7 @@ components:
       mountSources: true
   - name: mongodb
     container:
-      image: mongo:8.2-noble
+      image: quay.io/mongodb/mongodb-community-server:8.2-ubi9
       env:
         - name: MONGO_INITDB_ROOT_USERNAME
           value: user

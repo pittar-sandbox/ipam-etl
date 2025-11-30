@@ -84,6 +84,9 @@ components:
           value: "user"
         - name: ME_CONFIG_MONGODB_ADMINPASSWORD
           value: "password"
+        # ADD THIS LINE
+        - name: ME_CONFIG_MONGODB_ENABLE_ADMIN
+          value: "true" # <-- Ensures the username/password are used
         - name: ME_CONFIG_BASICAUTH_USERNAME
           value: "user"
         - name: ME_CONFIG_BASICAUTH_PASSWORD

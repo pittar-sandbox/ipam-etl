@@ -4,7 +4,7 @@ A Camel Quarkus application designed to ingest, normalize, and persist IP Addres
 
 ## Overview
 
-This application acts as an ETL (Extract, Transform, Load) pipeline using **Camel YAML DSL**. It monitors a specific directory for CSV files from different IPAM providers (BlueCat, Infoblox, and others), parses them according to their specific formats, normalizes the data into a common structure, and stores the results in a MongoDB database.
+This application acts as an ETL (Extract, Transform, Load) pipeline using **Camel YAML DSL**. It monitors a specific directory for CSV files from different IPAM providers (BlueCat, Infoblox, and others), parses them according to their specific formats, normalizes the data into a common structure, and stores the results in a MongoDB database. **For unrecognized formats, it leverages a Granite LLM to intelligently parse and extract data.**
 
 ### Key Features
 
@@ -13,6 +13,7 @@ This application acts as an ETL (Extract, Transform, Load) pipeline using **Came
     *   **BlueCat:** Parses CSV exports containing address records (`A`, `AAAA`), filtering out deleted entries.
     *   **Infoblox:** Handles complex multi-section CSV files containing both `NETWORK` and `HOSTRECORD` definitions.
     *   **Other:** Parses generic CSV formats mapping IP, Hostname, Status, and MAC address.
+    *   **AI Fallback:** Uses the `granite-3.1-8b-instruct` model to parse unrecognized CSV formats.
 *   **Standardized Data Model:** All inputs are converted into a unified `IpamRecord` JSON format.
 *   **Recursive Polling:** Automatically detects and processes files in nested directories within `src/main/resources/samples`.
 *   **MongoDB Persistence:** Efficiently stores normalized records using Camel's MongoDB component.
@@ -40,6 +41,14 @@ The destination for processed records is configurable:
 ipam.output.endpoint=mongodb:camelMongoClient?database=ipam_db&collection=ipam_records&operation=insert
 ```
 
+### LLM Configuration
+The application uses a Granite model for parsing unknown formats. Configure the endpoint in `application.properties`:
+```properties
+quarkus.rest-client."llm-api".url=https://<your-llm-endpoint>
+quarkus.rest-client."llm-api".connect-timeout=240000
+quarkus.rest-client."llm-api".read-timeout=240000
+```
+
 ## Running the Application
 
 ### Development Mode
@@ -65,6 +74,7 @@ The application determines the parser based on the parent directory of the input
 *   `.../bluecat/*.csv` -> BlueCat Parser
 *   `.../infoblox/*.csv` -> Infoblox Parser
 *   `.../other/*.csv` -> Generic Parser
+*   **Any other directory** -> AI Parser (Granite)
 
 ## Testing
 

@@ -61,7 +61,7 @@ components:
       mountSources: true
   - name: mongodb
     container:
-      image: mongo:8.2
+      image: mongo:8.2-noble
       env:
         - name: MONGO_INITDB_ROOT_USERNAME
           value: user

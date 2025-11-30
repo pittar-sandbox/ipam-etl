@@ -69,6 +69,12 @@ components:
           value: password
         - name: MONGO_INITDB_DATABASE
           value: ipam
+      volumeMounts:
+        - name: mongodb-data
+          path: /data/db # This is the default path used by MongoDB
+  - volume:
+      size: 1G
+    name: mongodb-data
   - volume:
       size: 1G
     name: m2

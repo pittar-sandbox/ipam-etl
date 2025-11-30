@@ -97,12 +97,12 @@ components:
           protocol: http
       cpuLimit: '0.5'
       memoryLimit: '512Mi'
-  - volume:
+  - name: mongodb-data
+    volume:
       size: 1G
-    name: mongodb-data
-  - volume:
-      size: 1G
-    name: m2
+  - name: m2
+    volume:
+      size: 1G 
 commands:
   - id: 1-package
     exec:

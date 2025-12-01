@@ -45,12 +45,12 @@ components:
           name: main
           protocol: https
           targetPort: 8080
-          path: /
-        - exposure: public
-          name: quarkus-devui
-          path: /q/dev-ui
-          protocol: https
-          targetPort: 8080
+          path: /api/ipam/view
+        # - exposure: public
+        #   name: quarkus-devui
+        #   path: /q/dev-ui
+        #   protocol: https
+        #   targetPort: 8080
       volumeMounts:
         - name: m2
           path: /home/user/.m2

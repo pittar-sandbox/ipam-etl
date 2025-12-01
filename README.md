@@ -81,6 +81,7 @@ The application determines the parser based on the parent directory of the input
 Integration tests are provided in `IpamRouteTest.java`. These tests verify the parsing logic by mocking the database output.
 ```bash
 ./mvnw test
+```
 
 ## Development Environment
 

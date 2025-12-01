@@ -3,6 +3,7 @@
     "redhat.java",
     "redhat.vscode-yaml",
     "redhat.vscode-quarkus",
-    "RooVeterinaryInc.roo-cline"
+    "RooVeterinaryInc.roo-cline",
+    "Anthropic.claude-code"
   ]
 }

@@ -37,4 +37,13 @@ public class IpamResource {
     public TemplateInstance view() {
         return ipam.data("records", getAllIpamRecords());
     }
+
+    @GET
+    @Path("/delete")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String deleteAll() {
+        MongoCollection<Document> collection = mongoClient.getDatabase("ipam").getCollection("ipam_records");
+        collection.deleteMany(new Document());
+        return "All records deleted";
+    }
 }
